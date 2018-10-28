@@ -34,3 +34,11 @@ functions:
           path: poll-group
           method: post
           cors: true
+  getChannelsList:
+    handler: functions.getChannelsList
+    role: arn:aws:iam::903524011484:role/bridgebot-lambda-role
+    events:
+      - http:
+          path: channels-list
+          method: get
+          cors: true

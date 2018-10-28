@@ -39,3 +39,29 @@ module.exports.pollGroup = (event, context, callback) => {
       };
     });
 };
+
+module.exports.getChannelsList = (event, context, callback) => {
+  const web = new WebClient(token);
+  return web.conversations
+    .list()
+    .then(res => {
+      return {
+        statusCode: 200,
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify(res)
+      };
+    })
+    .catch(err => {
+      return {
+        statusCode: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+        },
+        body: JSON.stringify({
+          error: err.message
+        })
+      };
+    });
+};
