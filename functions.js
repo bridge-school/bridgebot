@@ -65,17 +65,3 @@ module.exports.getChannelsList = (event, context, callback) => {
       };
     });
 };
-
-module.exports.submitPollQuestion = (event, context, callback) => {
-  const body = JSON.parse(event.body);
-  return new Promise(resolve => resolve({
-    statusCode: 200,
-    headers: {
-      "content-type": "application/json"
-    },
-    body: JSON.stringify({
-      success: true,
-      message: JSON.stringify(body)
-    })
-  }))
-}
