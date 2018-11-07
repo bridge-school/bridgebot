@@ -35,7 +35,7 @@ jobs:
             - node_modules/
       - run:
           name: Deploy with serverless
-          command: serverless deploy function --function pollGroup
+          command: serverless deploy -v
 workflows:
   version: 2
   test_deploy:
