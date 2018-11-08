@@ -16,7 +16,7 @@ module.exports.getChannelsList = (event, context, callback) => {
   return web.conversations
     .list()
     .then(res => {
-      return { 
+      return {
         statusCode: 200,
         headers: COMMON_HEADERS,
         body: JSON.stringify(res)
@@ -40,7 +40,7 @@ module.exports.getUserList = (event, context, callback) => {
     .members({
       channel: body.usergroup
     })
-    .then(res => loopThroughUsers(res))
+    .then(data => loopThroughUsers(data))
     .then(res => {
       return {
         statusCode: 200,
@@ -101,7 +101,7 @@ module.exports.getAllPollQuestions = () => {
 const loopThroughUsers = users => {
   const members = users.members;
   members.forEach(member => messageUser(member));
-}
+};
 
 const messageUser = (event) => {
   const web = new WebClient(token);
@@ -151,4 +151,4 @@ const messageUser = (event) => {
         })
       };
     });
-}
+};
