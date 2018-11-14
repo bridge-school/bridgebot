@@ -120,24 +120,25 @@ module.exports.getSinglePollQuestion = (event, context, callback) => {
 };
 
 module.exports.getPollResponses = (event, context, callback) => {
-  const body = JSON.parse(event.body);
+  if (event.queryStringParameters && event.queryStringParameters.pollId) {
+    const pollId = event.queryStringParameters.pollId;
+  } else {
+    throw new Error("pollId is a required query parameter");
+  }
 
   return db
     .collection("responses")
-    .where('pollId', '==', body.id)
+    .where("pollId", "==", pollId)
     .get()
-    .then(snapshot => snapshot.forEach(doc => doc.data()))
-    // .then(snapshot => {
-    //   snapshot.forEach(doc => {
-    //     console.log(doc.id, '=>', doc.data());
-    //   });
-    // })
-    .then(data => ({
+    .then(qSnapshot => ({
       statusCode: 200,
       headers: COMMON_HEADERS,
       body: JSON.stringify({
         success: true,
-        message: data
+        message: qSnapshot.docs.map(doc => ({
+          id: doc.id,
+          data: doc.data()
+        }))
       })
     }))
     .catch(err => ({
@@ -214,14 +215,20 @@ const messageUser = event => {
       ]
     })
     .then(res => {
-      return { statusCode: 200, headers: COMMON_HEADERS, body: JSON.stringify(res) };
+      return {
+        statusCode: 200,
+        headers: COMMON_HEADERS,
+        body: JSON.stringify(res)
+      };
     })
     .catch(err => {
-      return { statusCode: 500, headers: COMMON_HEADERS, body: JSON.stringify(
-          {
-            error: err.message
-          }
-        ) };
+      return {
+        statusCode: 500,
+        headers: COMMON_HEADERS,
+        body: JSON.stringify({
+          error: err.message
+        })
+      };
     });
 };
 
@@ -230,20 +237,26 @@ module.exports.handleUserResponse = (event, context, callback) => {
   const response = JSON.parse(data.substring(8));
   const clickedAnswer = response.actions[0].value;
   const pollId = response.callback_id;
-  const answer = {answer: clickedAnswer, pollId};
+  const answer = { answer: clickedAnswer, pollId };
 
   return db
     .collection("responses")
     .doc()
     .set(answer)
     .then(res => {
-      return { statusCode: 200, headers: COMMON_HEADERS, body: `You answered '${clickedAnswer}'. Thanks for participating in the poll!` };
+      return {
+        statusCode: 200,
+        headers: COMMON_HEADERS,
+        body: `You answered '${clickedAnswer}'. Thanks for participating in the poll!`
+      };
     })
     .catch(err => {
-      return { statusCode: 500, headers: COMMON_HEADERS, body: JSON.stringify(
-        {
+      return {
+        statusCode: 500,
+        headers: COMMON_HEADERS,
+        body: JSON.stringify({
           error: err.message
-        }
-      )};
+        })
+      };
     });
 };

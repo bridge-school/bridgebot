@@ -72,8 +72,12 @@ functions:
     events:
       - http:
           path: responses
-          method: post
+          method: get
           cors: true
+          request:
+            parameters:
+              querystrings:
+                pollId: true
   messageUser:
     handler: functions.messageUser
     role: arn:aws:iam::903524011484:role/bridgebot-lambda-role
