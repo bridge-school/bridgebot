@@ -135,10 +135,14 @@ module.exports.getPollResponses = (event, context, callback) => {
       headers: COMMON_HEADERS,
       body: JSON.stringify({
         success: true,
+<<<<<<< HEAD
         message: qSnapshot.docs.map(doc => ({
           id: doc.id,
           data: doc.data()
         }))
+=======
+        message: data
+>>>>>>> trying to get data from firebase query
       })
     }))
     .catch(err => ({
