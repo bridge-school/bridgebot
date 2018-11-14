@@ -119,6 +119,37 @@ module.exports.getSinglePollQuestion = (event, context, callback) => {
     }));
 };
 
+module.exports.getPollResponses = (event, context, callback) => {
+  const body = JSON.parse(event.body);
+
+  return db
+    .collection("responses")
+    .where('pollId', '==', body.id)
+    .get()
+    .then(snapshot => snapshot.forEach(doc => doc.data()))
+    // .then(snapshot => {
+    //   snapshot.forEach(doc => {
+    //     console.log(doc.id, '=>', doc.data());
+    //   });
+    // })
+    .then(data => ({
+      statusCode: 200,
+      headers: COMMON_HEADERS,
+      body: JSON.stringify({
+        success: true,
+        message: data
+      })
+    }))
+    .catch(err => ({
+      statusCode: 500,
+      headers: COMMON_HEADERS,
+      body: JSON.stringify({
+        success: false,
+        message: err.message
+      })
+    }));
+};
+
 module.exports.getAllPollQuestions = () => {
   return db
     .collection("polls")
