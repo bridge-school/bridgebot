@@ -120,11 +120,8 @@ module.exports.getSinglePollQuestion = (event, context, callback) => {
 };
 
 module.exports.getPollResponses = (event, context, callback) => {
-  if (event.queryStringParameters && event.queryStringParameters.pollId) {
-    const pollId = event.queryStringParameters.pollId;
-  } else {
-    throw new Error("pollId is a required query parameter");
-  }
+  const body = JSON.parse(event.body);
+  const pollId = body.id
 
   return db
     .collection("responses")
