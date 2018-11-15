@@ -136,6 +136,7 @@ module.exports.getPollResponses = (event, context, callback) => {
       body: JSON.stringify({
         success: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: qSnapshot.docs.map(doc => ({
           id: doc.id,
           data: doc.data()
@@ -143,6 +144,9 @@ module.exports.getPollResponses = (event, context, callback) => {
 =======
         message: data
 >>>>>>> trying to get data from firebase query
+=======
+        message: data
+>>>>>>> f8716b9bc403d5952143dbcb74a7bd5ee15ddd5b
       })
     }))
     .catch(err => ({
