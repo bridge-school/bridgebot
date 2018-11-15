@@ -120,11 +120,8 @@ module.exports.getSinglePollQuestion = (event, context, callback) => {
 };
 
 module.exports.getPollResponses = (event, context, callback) => {
-  if (event.queryStringParameters && event.queryStringParameters.pollId) {
-    const pollId = event.queryStringParameters.pollId;
-  } else {
-    throw new Error("pollId is a required query parameter");
-  }
+  const body = JSON.parse(event.body);
+  const pollId = body.id
 
   return db
     .collection("responses")
@@ -135,18 +132,10 @@ module.exports.getPollResponses = (event, context, callback) => {
       headers: COMMON_HEADERS,
       body: JSON.stringify({
         success: true,
-<<<<<<< HEAD
-<<<<<<< HEAD
         message: qSnapshot.docs.map(doc => ({
           id: doc.id,
           data: doc.data()
         }))
-=======
-        message: data
->>>>>>> trying to get data from firebase query
-=======
-        message: data
->>>>>>> f8716b9bc403d5952143dbcb74a7bd5ee15ddd5b
       })
     }))
     .catch(err => ({

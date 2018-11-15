@@ -72,7 +72,7 @@ functions:
     events:
       - http:
           path: responses
-          method: get
+          method: post
           cors: true
           request:
             parameters:
